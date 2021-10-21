@@ -1,10 +1,10 @@
 # DPO (Direct Pay Online) PHP Package
-## _The best DPO Laravel package, simple Ever_
+## _The best DPO php package, simple Ever_
 
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-This is the package that will help you add DPO Payment API to your Laravel Application, We are open to contribution and support to make it better.
+This is the package that will help you add DPO Payment API to your PHP Application, We are open to contribution and support to make it better.
 
 ## Features
 

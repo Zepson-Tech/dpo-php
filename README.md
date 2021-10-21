@@ -1,4 +1,4 @@
-# DPO (Direct Pay Online) Laravel Package
+# DPO (Direct Pay Online) PHP Package
 ## _The best DPO Laravel package, simple Ever_
 
 
@@ -53,40 +53,9 @@ use Zepson\Dpo\Dpo;
 
 Install the package Via Composer 
 ```sh
-    composer require zepson/dpo-laravel
-```
- Now You can Publish the configuration File and Migration
-```sh
-  php artisan vendor:publish --provider="Zepson\Dpo\DpoServiceProvider" --tag="dpo-laravel-migrations"
+    composer require zepson/dpo-php
 ```
 
-   Migrate The Database table[OPTIONAL]
-```php
-  php artisan migrate
-```
-
-#### Configuration File'
-
-```php
-<?php
-
-return [
-    "company_token"=>env("DPO_COMPANY_TOKEN","9F416C11-127B-4DE2-AC7F-D5710E4C5E0A"),
-    "account_type"=>env("DPO_ACCOUNT_TYPE","3854"),
-    'is_test_mode'=>env("DPO_IS_TEST_MODE",true),
-    "back_url"=>env("DPO_BACK_URL"),
-    "redirect_url"=>env("DPO_REDIRECT_URL")
-];
-```
-The above Details are for Test/Sandbox environment taken from DPO public documentation
-#### Update .env File with Correct Informations
-```
-DPO_COMPANY_TOKEN = "YOUR_DPO_COMPANY_TOKEN"
-DPO_ACCOUNT_TYPE = "YOUR_DPO_ACCONT_TYPE"
-DPO_IS_TEST_MODE = "true/false"
-DPO_BACK_URL ="YOUR APPLICATION_BACK_URL"
-DPO_REDIRECT_URL =  "YAPPLICATION_REDIRECT_URL_AFTER_RESPONSE_FROM_DPO"
-```
 ## USAGE
 - create array of your order which match  parrameters in the following exaple
 ```php

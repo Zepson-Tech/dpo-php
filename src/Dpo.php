@@ -4,6 +4,11 @@ namespace Zepson\Dpo;
 
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Dpo
+ * @author Novath Thomas <ujumbe@zepson.co.tz>
+ * 
+ */
 class Dpo
 {
     const DPO_URL_TEST = 'https://secure1.sandbox.directpay.online';
@@ -13,10 +18,12 @@ class Dpo
     private $dpoGateway;
     private $testMode = false;
 
-
-    public function __construct( )
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        if ( false) {
+        if (false) {
             $this->dpoUrl = self::DPO_URL_TEST;
         } else {
             $this->dpoUrl = self::DPO_URL_LIVE;
@@ -24,6 +31,9 @@ class Dpo
         $this->dpoGateway = $this->dpoUrl . '/payv2.php?ID=';
     }
 
+    /**
+     * getDpoGateway
+     */
     public function getDpoGateway()
     {
         return $this->dpoGateway;
@@ -34,12 +44,11 @@ class Dpo
      * @param $data
      * @return array
      */
-    public function createToken( $data )
+    public function createToken(array $data)
     {
 
-
         $companyToken      = $data['companyToken'];
-        $accountType       =  $data['accountType'];
+        $accountType       = $data['accountType'];
         $paymentAmount     = $data['paymentAmount'];
         $paymentCurrency   = $data['paymentCurrency'];
         $customerFirstName = $data['customerFirstName'];
@@ -47,12 +56,13 @@ class Dpo
         $customerAddress   = $data['customerAddress'];
         $customerCity      = $data['customerCity'];
         $customerPhone     = $data['customerPhone'];
-        $redirectURL       =  $data['redirectURL'];
-        $backURL           =  $data['backUrl'];
+        $redirectURL       = $data['redirectURL'];
+        $backURL           = $data['backUrl'];
         $customerEmail     = $data['customerEmail'];
         $reference         = $data['companyRef'];
 
-        $odate   = date( 'Y/m/d H:i' );
+        $odate   = date('Y/m/d H:i');
+
         $postXml = <<<POSTXML
         <?xml version="1.0" encoding="utf-8"?>
         <API3G>
@@ -83,7 +93,7 @@ class Dpo
 POSTXML;
 
         $curl = curl_init();
-        curl_setopt_array( $curl, array(
+        curl_setopt_array($curl, array(
             CURLOPT_URL            => $this->dpoUrl . "/API/v6/",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => "",
@@ -95,28 +105,28 @@ POSTXML;
             CURLOPT_HTTPHEADER     => array(
                 "cache-control: no-cache",
             ),
-        ) );
+        ));
 
-          $response = curl_exec( $curl );
-           $error    = curl_error( $curl );
+        $response = curl_exec($curl);
+        $error    = curl_error($curl);
 
-        curl_close( $curl );
-            // return $response
-        if ( $response != '' ) {
-            $xml               = new \SimpleXMLElement( $response );
-             $result            = $xml->xpath( 'Result' )[0]->__toString();
-            $resultExplanation = $xml->xpath( 'ResultExplanation' )[0]->__toString();
+        curl_close($curl);
+
+        if ($response != '') {
+            $xml               = new \SimpleXMLElement($response);
+            $result            = $xml->xpath('Result')[0]->__toString();
+            $resultExplanation = $xml->xpath('ResultExplanation')[0]->__toString();
             $returnResult      = [
                 'result'            => $result,
                 'resultExplanation' => $resultExplanation,
             ];
 
             // Check if token was created successfully
-            if ( $xml->xpath( 'Result' )[0] != '000' ) {
+            if ($xml->xpath('Result')[0] != '000') {
                 $returnResult['success'] = 'false';
             } else {
-                $transToken                 = $xml->xpath( 'TransToken' )[0]->__toString();
-                $transRef                   = $xml->xpath( 'TransRef' )[0]->__toString();
+                $transToken                 = $xml->xpath('TransToken')[0]->__toString();
+                $transRef                   = $xml->xpath('TransRef')[0]->__toString();
                 $returnResult['success']    = 'true';
                 $returnResult['transToken'] = $transToken;
                 $returnResult['transRef']   = $transRef;
@@ -125,8 +135,8 @@ POSTXML;
         } else {
             return [
                 'success'           => false,
-                'result'            => !empty( $error ) ? $error : 'Unknown error occurred in token creation',
-                'resultExplanation' => !empty( $error ) ? $error : 'Unknown error occurred in token creation',
+                'result'            => !empty($error) ? $error : 'Unknown error occurred in token creation',
+                'resultExplanation' => !empty($error) ? $error : 'Unknown error occurred in token creation',
             ];
         }
     }
@@ -136,14 +146,14 @@ POSTXML;
      * @param $data
      * @return bool|string
      */
-    public function verifyToken( $data )
+    public function verifyToken(array $data)
     {
         $companyToken = $data['companyToken'];
         $transToken   = $data['transToken'];
 
         try {
             $curl = curl_init();
-            curl_setopt_array( $curl, array(
+            curl_setopt_array($curl, array(
                 CURLOPT_URL            => $this->dpoUrl . "/API/v6/",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => "",
@@ -155,62 +165,57 @@ POSTXML;
                 CURLOPT_HTTPHEADER     => array(
                     "cache-control: no-cache",
                 ),
-            ) );
+            ));
 
-            $response = curl_exec( $curl );
-            $err      = curl_error( $curl );
+            $response = curl_exec($curl);
+            $err      = curl_error($curl);
 
-            curl_close( $curl );
+            curl_close($curl);
 
-            if ( strlen( $err ) > 0 ) {
+            if (strlen($err) > 0) {
                 echo "cURL Error #:" . $err;
             } else {
                 return $response;
             }
-        } catch ( \Exception $e ) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
 
 
-    public function getPaymentUrl($data){
+    public function getPaymentUrl(array $data)
+    {
         $dpo = new Dpo;
-     if ( $data['success'] === 'true' ) {
+        if ($data['success'] === 'true') {
 
-      $verify   = $dpo->verifyToken( ["companyToken"=>$data['companyToken'],"transToken"=>$data['transToken']]);
+            $verify   = $dpo->verifyToken(["companyToken" => $data['companyToken'], "transToken" => $data['transToken']]);
 
-        if ( !empty( $verify ) && $verify != '' ) {
-            $verify = new \SimpleXMLElement( $verify );
+            if (!empty($verify) && $verify != '') {
+                $verify = new \SimpleXMLElement($verify);
 
-            if ( $verify->Result->__toString() === '900' ) {
-                $payUrl = $dpo->getDpoGateway() . $data['transToken'];
-                // redirect($payUrl);
-                return $payUrl;
-
-
+                if ($verify->Result->__toString() === '900') {
+                    $payUrl = $dpo->getDpoGateway() . $data['transToken'];
+                    return $payUrl;
+                }
             }
-        }
-    } else {
-        echo 'Something went wrong: ' . $data['resultExplanation'];
-        $url =  'viewinvoice.php?id=' . $data['companyRef'];
-        echo <<<HTML
+        } else {
+            echo 'Something went wrong: ' . $data['resultExplanation'];
+            $url =  'viewinvoice.php?id=' . $data['companyRef'];
+            echo <<<HTML
 <br><br><a href="$url">Click here to return</a>
 HTML;
-
+        }
     }
-    }
 
 
 
-    public function directPayment($data){
+    public function directPayment(array $data)
+    {
         $get_payment_token = $this->createToken($data);
 
         $payment_url = $this->getPaymentUrl($get_payment_token);
 
-        header("Location: ".$payment_url);
-       die();
-
-
+        header("Location: " . $payment_url);
+        die();
     }
 }
-

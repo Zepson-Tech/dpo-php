@@ -1,6 +1,6 @@
 # DPO (Direct Pay Online) PHP Package
-## _The best DPO php package, simple Ever_
 
+## _The best DPO php package, simple Ever_
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
@@ -8,100 +8,116 @@ This is the package that will help you add DPO Payment API to your PHP Applicati
 
 ## Features
 
-- Create Payment Token (Initiate order at DPO servers)
-- Verify Payment Token (Check Transaction status)
-- Make Direct payment(Redirects order direct to DPO payment page)
-- Fetch Payment Token
-- Database migrations to save transaction details
-- Much easy to use
-- Constantly updated
+-   Create Payment Token (Initiate order at DPO servers)
+-   Verify Payment Token (Check Transaction status)
+-   Make Direct payment(Redirects order direct to DPO payment page)
+-   Fetch Payment Token
+-   Database migrations to save transaction details
+-   Much easy to use
+-   Constantly updated
 
 ## How It works
-1. Create payment token
+
+1. Create Payment token
 2. Verify token
 3. Redirect to DPO payment page
 4. Fetch response
-5. Done 
- 
-#### The package does all this for you behind the scenes😂
-Basic Usage Example.
+5. Done
+
+#### The package does all this for you behind the scenes 😂
+
+### Basic Usage Example.
 
 ```php
-<?php 
-use Zepson\Dpo\Dpo;
-........
+<?php
 
-  $dpo = new Dpo();
-   $order = [
-            'paymentAmount'=>"10000",
-            'paymentCurrency'=> "TZS",
-            'customerFirstName'=> "Novath",
-            'customerLastName'=> "Thomas",
-            'customerAddress'=> "Tanzania",
-             'customerCity'=>"Dodoma",
-            'customerPhone'=> "0752771650",
-            'customerEmail'=> "novath@zepson.co.tz",
-            'companyRef'=> "34TESTREFF"
-        ];
-    //Now make  payment
-    $dpo->directPayment($data);
-    //Its done!  Simple right!😂
+use Zepson\Dpo\Dpo;
+
+$dpo = new Dpo();
+$order = [
+    'paymentAmount' => "10000",
+    'paymentCurrency' => "TZS",
+    'customerFirstName' => "Novath",
+    'customerLastName' => "Thomas",
+    'customerAddress' => "Tanzania",
+    'customerCity' => "Dodoma",
+    'customerPhone' => "0752771650",
+    'customerEmail' => "novath@zepson.co.tz",
+    'companyRef' => "34TESTREFF"
+];
+// Now make  payment
+$dpo->directPayment($data);
+// Its done! Simple right! 😂
 
 ```
 
 ## Installation
 
-Install the package Via Composer 
+Install the package Via Composer
+
 ```sh
-    composer require zepson/dpo-php
+composer require zepson/dpo-php
 ```
 
+## Requirements
+
+- PHP: "7.4|^8.0"
+
 ## USAGE
-- create array of your order which match  parrameters in the following exaple
+
+-   create array of your order which match parrameters in the following exaple
+
 ```php
 $order = [
-            'paymentAmount'=>"10000",
-            'paymentCurrency'=> "TZS",
-            'customerFirstName'=> "Novath",
-            'customerLastName'=> "Thomas",
-            'customerAddress'=> "Tanzania",
-             'customerCity'=>"Dodoma",
-            'customerPhone'=> "0752771650",
-            'customerEmail'=> "novath@zepson.co.tz",
-            'companyRef'=> "34TESTREFF"
-        ];
+    'paymentAmount' => "10000",
+    'paymentCurrency' => "TZS",
+    'customerFirstName' => "Novath",
+    'customerLastName' => "Thomas",
+    'customerAddress' => "Tanzania",
+    'customerCity' => "Dodoma",
+    'customerPhone' => "0752771650",
+    'customerEmail' => "novath@zepson.co.tz",
+    'companyRef' => "34TESTREFF"
+];
+
 ```
-- Now you can choose to make direct payment or createToken First and then make payment
-- Starting with Direct Payment
+
+-   Now you can choose to make direct payment or createToken First and then make payment
+-   Starting with Direct Payment
+
 ```php
-   $dpo = new Dpo;
-   return $dpo->directPayment($data); //this will redirect user to DPO Payment page
- ```
- - If you preffer to save details then this is the ideal step to follow [Generate Token, Make payment]
- - Get Token
- ```php
-       $token = $dpo->createToken($data); //return array of response with transaction code
-       //you can save or do what ever you want with the response
+$dpo = new Dpo;
+return $dpo->directPayment($data); // this will redirect user to DPO Payment page
 ```
-- Get payment Url
+
+-   If you preffer to save details then this is the ideal step to follow [Generate Token, Make payment]
+-   Get Token
+
 ```php
-    $dpo->getPaymentUrl($token);
+$token = $dpo->createToken($data); //return array of response with transaction code
+//you can save or do what ever you want with the response
 ```
-- Redirect User to payment page
+
+-   Get payment Url
+
 ```php
-   return Redirect::to($payment_url);
+$dpo->getPaymentUrl($token);
+```
+
+-   Redirect User to payment page
+
+```php
+return Redirect::to($payment_url);
 ```
 
 As [Novath Thomas] always says
 
 > There is a huge difference between sysem security and
->complications, Complication hurts, API should'nt be complicated
->Thats one of the primary AIM of the introduction of APIs
-
+> complications, Complication hurts, API should'nt be complicated
+> Thats one of the primary AIM of the introduction of APIs
 
 #### We would like more contributions to make the package more secure and readable.
 
 ## License
 
-MIT
-
+This project is licensed under the MIT license.
